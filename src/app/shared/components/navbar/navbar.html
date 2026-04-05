@@ -1,0 +1,64 @@
+<nav class="navbar">
+  <div class="navbar-inner">
+    <!-- Logo -->
+    <a routerLink="/" class="logo">
+      <span class="logo-icon">🔥</span>
+      <span class="logo-text">Kilimani Thrive</span>
+    </a>
+
+    <!-- Desktop Nav Links -->
+    <ul class="nav-links">
+      <li>
+        <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Home</a>
+      </li>
+      <li>
+        <a routerLink="/prayer-requests" routerLinkActive="active">Prayer Requests</a>
+      </li>
+      <li><a routerLink="/bible-study" routerLinkActive="active">Bible Study</a></li>
+      <li><a routerLink="/blog" routerLinkActive="active">Blog</a></li>
+      <li><a routerLink="/about" routerLinkActive="active">About</a></li>
+      <li><a href="#">Contact</a></li>
+    </ul>
+
+    <!-- CTA + Sign In -->
+    <div class="nav-actions">
+      @if (authService.isAuthenticated()) {
+        <span class="nav-user-greeting">Hi, {{ authService.currentUser()?.firstName || 'User' }}</span>
+        <a href="#" class="btn-sign-out" (click)="logout($event)">Log Out</a>
+      } @else {
+        <a routerLink="/login" class="btn-sign-in">Sign In</a>
+        <a routerLink="/register" class="btn-join-us">Join Us</a>
+      }
+    </div>
+
+    <!-- Mobile Menu Toggle -->
+    <button class="mobile-toggle" (click)="toggleMenu()" [attr.aria-label]="'Toggle menu'">
+      @if (menuOpen()) {
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      } @else {
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+      }
+    </button>
+  </div>
+
+  <!-- Mobile Menu -->
+  @if (menuOpen()) {
+    <div class="mobile-menu">
+      <a routerLink="/" (click)="closeMenu()">Home</a>
+      <a routerLink="/prayer-requests" (click)="closeMenu()">Prayer Requests</a>
+      <a routerLink="/bible-study" (click)="closeMenu()">Bible Study</a>
+      <a routerLink="/blog" (click)="closeMenu()">Blog</a>
+      <a routerLink="/about" (click)="closeMenu()">About</a>
+      <a href="#">Contact</a>
+      <div class="mobile-menu-actions">
+        @if (authService.isAuthenticated()) {
+          <span class="nav-user-greeting block-greeting">Hi, {{ authService.currentUser()?.firstName || 'User' }}</span>
+          <a href="#" class="btn-sign-out" (click)="logout($event)">Log Out</a>
+        } @else {
+          <a routerLink="/login" class="btn-sign-in" (click)="closeMenu()">Sign In</a>
+          <a routerLink="/register" class="btn-join-us" (click)="closeMenu()">Join Us</a>
+        }
+      </div>
+    </div>
+  }
+</nav>

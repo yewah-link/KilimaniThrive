@@ -1,4 +1,6 @@
 import { Routes } from '@angular/router';
+import { LoginComponent } from './features/auth/login';
+import { RegisterComponent } from './features/auth/register';
 
 export const routes: Routes = [
   {
@@ -16,6 +18,18 @@ export const routes: Routes = [
   {
     path: 'blog',
     loadChildren: () => import('./features/blog/blog.routes').then(m => m.routes)
+  },
+  {
+    path: 'about',
+    loadChildren: () => import('./features/about/about.routes').then(m => m.routes)
+  },
+  {
+    path: 'login',
+    component: LoginComponent
+  },
+  {
+    path: 'register',
+    component: RegisterComponent
   },
   {
     path: '**',
