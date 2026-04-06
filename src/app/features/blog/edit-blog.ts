@@ -111,8 +111,8 @@ import { CropperDialogComponent } from '../../shared/components/cropper-dialog/c
       <!-- IMAGE CROPPER DIALOG -->
       @if (showCropper()) {
         <app-cropper-dialog
-          [imageChangedEvent]="imageChangedEvent"
-          [imageUrl]="imageChangedEvent ? undefined : featuredImageUrl() || undefined"
+          [imageFile]="imageFile"
+          [imageUrl]="imageFile ? undefined : featuredImageUrl() || undefined"
           (cropped)="handleImageCropped($event)"
           (cancel)="closeCropper()"
         ></app-cropper-dialog>
@@ -173,7 +173,7 @@ export class EditBlogComponent implements OnInit {
 
   // Cropper States
   showCropper = signal(false);
-  imageChangedEvent: any = '';
+  imageFile: File | null = null;
 
   blogForm = this.fb.group({
     title: ['', Validators.required],
@@ -224,7 +224,7 @@ export class EditBlogComponent implements OnInit {
   onFileSelected(event: any) {
     const file: File = event.target.files[0];
     if (file) {
-      this.imageChangedEvent = event;
+      this.imageFile = file;
       this.openCropper();
     }
   }
@@ -244,7 +244,7 @@ export class EditBlogComponent implements OnInit {
 
   removeImage() {
     this.featuredImageUrl.set(null);
-    this.imageChangedEvent = '';
+    this.imageFile = null;
     this.blogForm.patchValue({ featuredImage: '' });
   }
 
@@ -255,12 +255,12 @@ export class EditBlogComponent implements OnInit {
     if (file instanceof File) {
       reader.readAsDataURL(file);
     } else {
-      const blobFile = new File([file], 'cropped-image.png', { type: 'image/png' });
+      const blobFile = new File([file], 'cropped-image.jpg', { type: 'image/jpeg' });
       reader.readAsDataURL(blobFile);
     }
 
     this.uploading.set(true);
-    const fileToUpload = file instanceof File ? file : new File([file], 'cropped-image.png', { type: 'image/png' });
+    const fileToUpload = file instanceof File ? file : new File([file], 'cropped-image.jpg', { type: 'image/jpeg' });
     
     this.mediaService.upload(fileToUpload).subscribe({
       next: (res) => {

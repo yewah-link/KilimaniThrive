@@ -12,6 +12,10 @@ export const routes: Routes = [
     loadChildren: () => import('./features/prayer-request/prayer-request.routes').then(m => m.routes)
   },
   {
+    path: 'therapy',
+    loadChildren: () => import('./features/therapy/therapy.routes').then(m => m.routes)
+  },
+  {
     path: 'bible-study',
     loadChildren: () => import('./features/bible-study/bible-study.routes').then(m => m.routes)
   },

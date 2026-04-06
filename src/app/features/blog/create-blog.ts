@@ -104,7 +104,7 @@ import { CropperDialogComponent } from '../../shared/components/cropper-dialog/c
       <!-- IMAGE CROPPER DIALOG -->
       @if (showCropper()) {
         <app-cropper-dialog
-          [imageChangedEvent]="imageChangedEvent"
+          [imageFile]="imageFile"
           [imageUrl]="undefined"
           (cropped)="handleImageCropped($event)"
           (cancel)="closeCropper()"
@@ -387,7 +387,7 @@ export class CreateBlogComponent {
   
   // Cropper States
   showCropper = signal(false);
-  imageChangedEvent: any = '';
+  imageFile: File | null = null;
 
   isFieldInvalid(fieldName: string): boolean {
     const field = this.blogForm.get(fieldName);
@@ -397,7 +397,7 @@ export class CreateBlogComponent {
   onFileSelected(event: any) {
     const file: File = event.target.files[0];
     if (file) {
-      this.imageChangedEvent = event;
+      this.imageFile = file;
       // Best UX: Open cropper instantly before any local preview or upload
       this.openCropper();
     }
@@ -418,7 +418,7 @@ export class CreateBlogComponent {
 
   removeImage() {
     this.featuredImageUrl.set(null);
-    this.imageChangedEvent = '';
+    this.imageFile = null;
     this.blogForm.patchValue({ featuredImage: '' });
   }
 
@@ -434,7 +434,7 @@ export class CreateBlogComponent {
       reader.readAsDataURL(file);
     } else {
       // It's a blob from the cropper
-      const blobFile = new File([file], 'cropped-image.png', { type: 'image/png' });
+      const blobFile = new File([file], 'cropped-image.jpg', { type: 'image/jpeg' });
       reader.readAsDataURL(blobFile);
     }
 
@@ -442,7 +442,7 @@ export class CreateBlogComponent {
     this.uploading.set(true);
     this.errorMessage.set(null);
     
-    const fileToUpload = file instanceof File ? file : new File([file], 'cropped-image.png', { type: 'image/png' });
+    const fileToUpload = file instanceof File ? file : new File([file], 'cropped-image.jpg', { type: 'image/jpeg' });
 
     this.mediaService.upload(fileToUpload).subscribe({
       next: (res) => {
